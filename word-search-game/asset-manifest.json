@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/word-search-game/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/word-search-game/static/js/main.aafa8618.chunk.js",
+    "main.js.map": "/word-search-game/static/js/main.aafa8618.chunk.js.map",
+    "runtime~main.js": "/word-search-game/static/js/runtime~main.56655d26.js",
+    "runtime~main.js.map": "/word-search-game/static/js/runtime~main.56655d26.js.map",
+    "static/js/2.ca150098.chunk.js": "/word-search-game/static/js/2.ca150098.chunk.js",
+    "static/js/2.ca150098.chunk.js.map": "/word-search-game/static/js/2.ca150098.chunk.js.map",
+    "static/js/3.1b3c587a.chunk.js": "/word-search-game/static/js/3.1b3c587a.chunk.js",
+    "static/js/3.1b3c587a.chunk.js.map": "/word-search-game/static/js/3.1b3c587a.chunk.js.map",
+    "index.html": "/word-search-game/index.html",
+    "precache-manifest.ea71fce6881a5de8502388aac53202f0.js": "/word-search-game/precache-manifest.ea71fce6881a5de8502388aac53202f0.js",
+    "service-worker.js": "/word-search-game/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/word-search-game/static/css/main.5ecd60fb.chunk.css.map"
+  }
+}
