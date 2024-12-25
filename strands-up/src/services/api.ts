@@ -6,7 +6,7 @@
 
 import { Board } from '../types/game';
 
-const API_URL = 'http://localhost:8000/api/game';
+const API_URL = 'https://strands-up-backend.onrender.com/api/game';
 
 /**
  * Generates a new game board using the provided API key.
@@ -28,7 +28,11 @@ export const generateGame = async (apiKey: string): Promise<Board> => {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to generate game: ${response.statusText}`);
+            const errorData = await response.json().catch(() => null);
+            throw new Error(
+                errorData?.detail || 
+                `Failed to generate game: ${response.statusText}`
+            );
         }
 
         const data = await response.json();
