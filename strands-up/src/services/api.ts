@@ -11,7 +11,7 @@ const API_URL = 'https://strands-up-backend.onrender.com/api/game';
 /**
  * Generates a new game board using the provided API key.
  * 
- * @param apiKey - The API key for authentication
+ * @param apiKey - The Anthropic API key for authentication
  * @returns A Promise that resolves to a Board object
  * @throws Error if the API request fails
  */
@@ -21,9 +21,10 @@ export const generateGame = async (apiKey: string): Promise<Board> => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                api_key: apiKey
+                seed_word: null  // Optional seed word for themed generation
             }),
         });
 
