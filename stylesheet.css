@@ -1,0 +1,188 @@
+/* Fonts */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
+
+/* Design */
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 16px;
+    font-family: 'Lato', Verdana, Helvetica, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0 0 10px;
+    text-align: justify;
+}
+
+em {
+    font-style: italic;
+}
+
+strong {
+    font-weight: 700;
+    color: #333;
+}
+
+small {
+    font-size: 75%;
+}
+
+a,
+a:visited {
+    color: #224b8d;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus,
+a:active {
+    color: #f09228;
+    text-decoration: none;
+}
+
+.highlight {
+    background-color: #ffffd0;
+    font-weight: 400;
+}
+
+heading {
+    display: block;
+    width: 100%;
+    font-size: 22px;
+    font-weight: 700;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-bottom: 5px;
+}
+
+name {
+    font-family: 'Lato', Verdana, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    display: block;
+    color: #333;
+    padding-bottom: 10px;
+}
+
+papertitle {
+    font-family: 'Lato', Verdana, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #224b8d;
+}
+
+/* Images */
+img {
+    border: none;
+    display: block;
+}
+
+img.hoverZoomLink {
+    border-radius: 5%;
+    transition: transform 0.2s;
+}
+
+img.hoverZoomLink:hover {
+    transform: scale(1.05);
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    name {
+        font-size: 24px;
+    }
+
+    heading {
+        font-size: 18px;
+    }
+
+    papertitle {
+        font-size: 16px;
+    }
+
+    /* Stack columns on mobile */
+    table tbody tr {
+        display: block;
+    }
+
+    table tbody tr td {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center;
+    }
+
+    /* Center images on mobile */
+    img {
+        margin: 0 auto;
+    }
+
+    /* Adjust text alignment on mobile */
+    p {
+        text-align: left;
+    }
+}
+
+/* List styles */
+ul {
+    margin: 10px 0 10px 20px;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+/* Custom classes */
+.one {
+    width: 160px;
+    height: 160px;
+    position: relative;
+}
+
+.two {
+    width: 160px;
+    height: 160px;
+    position: absolute;
+    transition: opacity .2s ease-in-out;
+    -moz-transition: opacity .2s ease-in-out;
+    -webkit-transition: opacity .2s ease-in-out;
+}
+
+.fade {
+    transition: opacity .2s ease-in-out;
+    -moz-transition: opacity .2s ease-in-out;
+    -webkit-transition: opacity .2s ease-in-out;
+}
+
+span.highlight {
+    background-color: #ffffd0;
+}
