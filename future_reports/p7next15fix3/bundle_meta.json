@@ -1,0 +1,7 @@
+{
+  "source_report_dir": "/Users/gene/Documents/Craftax_Baselines/analysis/future_imagination/oracle_plus_predict_state_history_key7_unabridged_tb0_viewer_p7next15fix3_20260321_115847",
+  "source_frame_dir": "/Users/gene/Documents/Craftax_Baselines/play_data/trajectory_records/traj_20260311_100410/render_frames_bs16",
+  "output_dir": "/Users/gene/Documents/Craftax_Baselines/site/future_report_p7next15fix3",
+  "frames_copied": 2334,
+  "frames_missing": 0
+}
