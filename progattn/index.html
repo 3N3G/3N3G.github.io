@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shape Without Routing, in Brief</title>
+<title>Training transformers with programmatic attention fails without content-dependent programs</title>
 <link rel="icon" type="image/png" href="../images/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -186,9 +186,9 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
 <a href="#setup">Setup</a>
 <a href="#main-result">Main result</a>
 <a href="#why-exact-gives-speedups-while-program-d">Why exact gives speedups while program doesn't</a>
-<a href="#the-pruning-effect-causal">The pruning effect, causal</a>
-<a href="#how-much-routing-buys-the-speedup-back">How much routing buys the speedup back</a>
-<a href="#positive-control">A content-dependent rule carries the benefit</a>
+<a href="#the-pruning-effect-causal">Testing the pruning explanation</a>
+<a href="#how-much-routing-buys-the-speedup-back">Interpolating between mean and exact attention</a>
+<a href="#positive-control">A content-dependent positive control</a>
 <a href="#open">Open</a>
 <a href="#references">References</a>
 </nav>
@@ -199,7 +199,7 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
   <p class="abstract">I test whether initializing a fresh transformer with the
   programmatic attention patterns synthesized in Hayes et al.<a href="#r1" class="ref">1</a> confers the
   convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Initializing with programs does converge faster than random initialization, but the programs themselves matter little: they speed up training no more than the same programs shuffled onto the wrong documents,
-  and replacing a head with its program changes the trained model's held-out cross-entropy, on average, about as much as <span class="hov" data-tip="By mean ablating the head's output. One concession: I measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>. The failure is in the programs, not the interface: a hand-written content-dependent rule, attending just after previous occurrences of the current token, speeds up training +3.9% and collapses to +0.3% when shuffled.</p>
+  and replacing a head with its program changes the trained model's held-out cross-entropy, on average, about as much as <span class="hov" data-tip="By mean ablating the head's output. One concession: I measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>. The failure appears to be in the programs rather than the interface: a hand-written content-dependent rule, attending just after previous occurrences of the current token, speeds up training +3.9% and collapses to +0.3% when shuffled.</p>
 </header>
 
 <h2 id="motivation-and-commentary">Motivation and commentary</h2>
@@ -261,7 +261,7 @@ baseline, defined only when every threshold is reached.</p>
 
 <h2 id="main-result">Main result</h2>
 <p>Exact attention transfers and boosts training; programs barely do. Re-pairing patterns with the wrong documents collapses exact's speedup and leaves program runs unmoved. Programs
-match the heads' sparsity (mean row entropy 1.76 against 1.81), so no property of the patterns themselves explains the gap. The benefit rides on the pairing: the content-dependent part of the pattern, the part that shuffling destroys.</p>
+match the heads' sparsity (mean row entropy 1.76 against 1.81), so no property of the patterns themselves explains the gap. What matters is pairing the pattern with the document it was computed from.</p>
 <div class="ktog" role="group" aria-label="heads constrained per run">
   <span>heads constrained</span>
   <button id="kbtn16" type="button" aria-pressed="true" onclick="document.getElementById('fig-k16').hidden=false;document.getElementById('fig-k1').hidden=true;this.setAttribute('aria-pressed','true');document.getElementById('kbtn1').setAttribute('aria-pressed','false')">K = 16</button>
@@ -436,15 +436,14 @@ specifically contain.</p>
 <p>The paper re-ranks candidate programs by document-averaged IoU, which favors flat
 programs: the chosen fits average 0.049 input-dependence against the library's 0.161,
 8.9&nbsp;SD below a random pick. But giving every head the program synthesized from its own attention, with 3.3× the input-dependence of the best fit, converges the same (+0.42% against +0.34%,
-<em>p</em>&nbsp;=&nbsp;0.41) and is equally indifferent to shuffling. More input-dependence in the program does not put the content-dependence back.</p>
+<em>p</em>&nbsp;=&nbsp;0.41) and is equally indifferent to shuffling. A more input-dependent program does not recover the missing document-specific routing.</p>
 <h3 id="x3">The fixed rule freezes the circuits programs need</h3>
 <p>Under bias injection the QK circuits keep their gradients and each head learns a weight λ on
 its prior. The ordering reproduces (exact +3.90%, own program +0.67%, best-fit +0.30%,
 uniform +0.05% over 144 heads), and heads amplify their program priors
-(λ&nbsp;=&nbsp;1.05–1.17) while gaining nothing from them: the programs are used, and still
-don't help.</p>
+(λ&nbsp;=&nbsp;1.05–1.17) while gaining nothing from them. So the gap cannot be explained by the model ignoring the program prior.</p>
 
-<h2 id="the-pruning-effect-causal">The pruning effect, causal</h2>
+<h2 id="the-pruning-effect-causal">Testing the pruning explanation</h2>
 <p>The paper flags that its replacement gains “may be akin to a pruning effect.” I find that they are: a program preserves the trained model on average as well as deleting the head, and the
 head's own mean pattern does slightly better with no program at all.</p>
 <figure><div class="figbox"><svg viewBox="0 0 720 260" class="fig" role="img" aria-label="Bar chart: replacing one head in the pretrained GPT-2, the best-fit program costs the same as deleting the head; the head's own mean pattern costs less; uniform and zeroing cost more">
@@ -469,12 +468,12 @@ head's own mean pattern does slightly better with no program at all.</p>
 </svg></div><figcaption>Interchange interventions on the pretrained GPT-2, 256 held-out documents, mean over the 16 selected heads. Program and deletion are statistically indistinguishable on average (paired difference −0.0001 nats); per head the difference runs from −0.019 to +0.017 nats.</figcaption></figure>
 
 
-<h2 id="how-much-routing-buys-the-speedup-back">How much routing buys the speedup back</h2>
-<p>The ladder's gentlest replacement was the head's own mean pattern, its shape with the content-dependent routing removed. That template is one end of a dial: replace each head's pattern with
+<h2 id="how-much-routing-buys-the-speedup-back">Interpolating between mean and exact attention</h2>
+<p>The ladder's gentlest replacement was the head's own mean pattern, its shape with the content-dependent routing removed. That template is one endpoint of an interpolation: replace each head's pattern with
 λ·(its attention on the document) + (1−λ)·(its document-mean template) and train as before
 (16 heads, 3 seeds, one head per run).</p>
 <figure><div class="figbox"><svg viewBox="0 0 660 300" class="fig" role="img" aria-label="Line chart: strict convergence speedup rises monotonically and concavely from +1.5% at lambda 0 to +6.1% at lambda 1; a dashed reference line marks the best-fit program at +1.35%">
-<text x="62" y="26" class="s-t">strict speedup as the head's own routing is dosed back in</text>
+<text x="62" y="26" class="s-t">strict speedup as the head's own routing is interpolated back in</text>
 <line x1="90" y1="250" x2="600" y2="250" class="s-grid"></line>
 <line x1="90" y1="185.4" x2="600" y2="185.4" class="s-grid"></line>
 <line x1="90" y1="120.8" x2="600" y2="120.8" class="s-grid"></line>
@@ -504,13 +503,12 @@ head's own mean pattern does slightly better with no program at all.</p>
 <text x="345" y="288" class="s-l" text-anchor="middle">fraction λ of the head's own routing — λ = 0 its document-mean template, λ = 1 its exact attention</text>
 </svg></div><figcaption>Strict convergence speedup as each head's pattern is interpolated from its document-mean template to its exact attention. Dashed line: the best-fit program.</figcaption></figure>
 <p>The template alone matches the best-fit program (+1.51% against +1.35%,
-<em>p</em>&nbsp;=&nbsp;0.22): the program floor is reached with the head's own shape and no symbolic fit. Every dose of real routing is significant (each point over program at
-<em>p</em>&nbsp;≤&nbsp;4×10<sup>−5</sup>). The curve is concave, with the first quarter of the routing restoring 47% of the program-to-exact gap, and the last quarter is still real (exact over λ = ¾
-by +0.45 points, <em>p</em>&nbsp;=&nbsp;3×10<sup>−4</sup>). The speedup is bought by
-routing, in proportion to the dose.</p>
+<em>p</em>&nbsp;=&nbsp;0.22), so the program-level speedup is available from the head's own shape with no symbolic fit. Speedup then increases monotonically with the amount of real routing, and every point is significantly above the program (each at
+<em>p</em>&nbsp;≤&nbsp;4×10<sup>−5</sup>). The relationship is concave: the first quarter of the routing recovers 47% of the program-to-exact gap, and the last quarter is still significant (exact over λ = ¾
+by +0.45 points, <em>p</em>&nbsp;=&nbsp;3×10<sup>−4</sup>). </p>
 
-<h2 id="positive-control">A content-dependent rule carries the benefit</h2>
-<p>The last doubt was whether any symbolic rule could carry that content-dependent part through the fixed interface, or only the trained model's own attention. To test it I wrote one: attend just after each previous occurrence of the current token, the classic induction pattern, computed from token identities alone. Injected through the same machinery (16 heads, 3 seeds, strict speedup), it speeds up training +3.94% and collapses to +0.33% when its patterns are shuffled across documents, faster aligned than shuffled in 16 of 16 heads (<em>p</em>&nbsp;=&nbsp;1.5×10<sup>−5</sup>). It beats the best-fit program by 2.6 points, and a variant attending to the occurrences themselves shows the same signature at +1.80% against +0.37%. On the dose curve this one rule sits where a λ&nbsp;≈&nbsp;0.32 dose of the head's real routing sits. The synthesized library was the bottleneck, not the symbolic interface.</p>
+<h2 id="positive-control">A content-dependent positive control</h2>
+<p>One remaining possibility is that the fixed interface cannot carry any useful symbolic rule at all, and only the trained model's own attention transfers. To test this I wrote one: attend just after each previous occurrence of the current token, the classic induction pattern, computed from token identities alone. Injected through the same machinery (16 heads, 3 seeds, strict speedup), it speeds up training +3.94% and collapses to +0.33% when its patterns are shuffled across documents, faster aligned than shuffled in 16 of 16 heads (<em>p</em>&nbsp;=&nbsp;1.5×10<sup>−5</sup>). It beats the best-fit program by 2.6 points, and a variant attending to the occurrences themselves shows the same signature at +1.80% against +0.37%. On the interpolation curve, this rule lands at the equivalent of λ&nbsp;≈&nbsp;0.32 of the head's real routing. This points to the synthesized program library, rather than the symbolic interface, as the bottleneck.</p>
 
 <h2 id="open">Open</h2>
 <p>I have not evaluated downstream abilities like QA, and the positive control covers two rules at one scale. The natural next step is a library of content-dependent rules: previous occurrences, matching brackets, sentence boundaries.</p>
