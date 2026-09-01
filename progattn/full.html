@@ -201,9 +201,9 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
   <h1>Attention transplants carry routing, and synthesized programs carry none of it</h1>
   <div class="byline">Gene Yang · 31 August 2026 · Based on <a href="#r1"><i>Explaining
   Attention with Program Synthesis</i></a><a href="#r1" class="ref">1</a></div>
-  <p class="abstract">We investigate whether <b>initializing</b> a fresh GPT-2-style transformer
-  with programmatic attention patterns confers a convergence speedup, and if so, what predicts it. We find that it offers a <b>slight speedup</b> compared to baselines &mdash; no larger than the same programs shuffled onto the wrong documents &mdash; but is significantly worse than initializing with the exact attention patterns, at least under the
-  <a href="#inject">training methods tried here</a>. We then investigate <b>three hypotheses</b> to further understand the mechanism: whether any fixed prior does as much, if it's the candidate selection, or the loss of expressivity from freezing the QK patterns. All three fail, and one intervention locates the difference: re-pair real attention's patterns with other documents and the speedup collapses; every program variant is indifferent to
+  <p class="abstract">I investigate whether <b>initializing</b> a fresh GPT-2-style transformer
+  with programmatic attention patterns confers a convergence speedup, and if so, what predicts it. I find that it offers a <b>slight speedup</b> compared to baselines &mdash; no larger than the same programs shuffled onto the wrong documents &mdash; but is significantly worse than initializing with the exact attention patterns, at least under the
+  <a href="#inject">training methods tried here</a>. I then investigate <b>three hypotheses</b> to further understand the mechanism: whether any fixed prior does as much, if it's the candidate selection, or the loss of expressivity from freezing the QK patterns. All three fail, and one intervention locates the difference: re-pair real attention's patterns with other documents and the speedup collapses; every program variant is indifferent to
   the same operation, even though the programs also compute their patterns from the text. This
   gives the paper's &ldquo;pruning effect&rdquo; caveat exact form: a program preserves the model
   it is spliced into because the routing it replaces is rarely needed, not because it reproduces
@@ -323,7 +323,7 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
 <text x="525.7" y="310" class="s-l" text-anchor="middle">+10%</text>
 <text x="333" y="328" class="s-l" text-anchor="middle">convergence speedup over an unconstrained baseline, one bar per 0.5 points, 144 heads per row</text>
 <text x="44" y="20" class="s-t">one head's attention replaced per run, every head in GPT-2-small</text></svg></div><figcaption>Per-head convergence speedup across all 144 GPT-2 heads, one head replaced per run at one seed. Vertical rule marks the mean.</figcaption></figure>
-<p>We measure each method by strict speedup: the baseline's steps to reach four validation-loss thresholds divided by this run's steps, geometric mean, defined only when every threshold is reached.&nbsp;</p><p>We find that real attention provides a substantial speedup which disappears when patterns are shuffled, while programs offer a modest speedup invariant to head-pattern pairing.&nbsp;</p>
+<p>I measure each method by strict speedup: the baseline's steps to reach four validation-loss thresholds divided by this run's steps, geometric mean, defined only when every threshold is reached.&nbsp;</p><p>I find that real attention provides a substantial speedup which disappears when patterns are shuffled, while programs offer a modest speedup invariant to head-pattern pairing.&nbsp;</p>
 
 <h2 id="motivation">Motivation</h2>
 <p>Injecting attention patterns from a trained model into a fresh one is known to accelerate
@@ -353,7 +353,7 @@ rather than these programs: a pre-registered control giving each head a <em>diff
 program matched on row entropy did exactly as well. The programs' benefit was predictable only
 from generic properties of the pattern, never from anything tying a program to its head &mdash;
 the first sign that the pairing itself does nothing. What needed explaining was the gap, and
-the explanations we could think of all failed:</p>
+the explanations I could think of all failed:</p>
 <div class="tbl"><table class="gloss">
   <thead><tr><th>hypothesis</th><th>falsified by</th></tr></thead>
   <tbody>
@@ -1241,6 +1241,7 @@ the head does.</p>
   <li id="r4">Puri et al. <i>Transformers Learn Faster with Semantic Focus.</i> NeurIPS 2025.
     <a href="https://arxiv.org/abs/2506.14095">arXiv:2506.14095</a>.</li>
 </ol>
+<footer>Experiments and writeup by Gene Yang, with substantial help from Anthropic&rsquo;s Claude Code.</footer>
 </div>
 <script>
 (function () {

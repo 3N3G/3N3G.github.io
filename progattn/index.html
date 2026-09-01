@@ -197,12 +197,12 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
   <h1>Training Transformers with Programmatic Attention Fails Without Routing-Carrying Programs</h1>
   <div class="byline">Gene Yang · 31 August 2026 · the brief version —
   <a href="full.html">full report</a></div>
-  <p class="abstract">We investigate whether <b>initializing</b> a fresh transformer with the
+  <p class="abstract">I investigate whether <b>initializing</b> a fresh transformer with the
   programmatic attention patterns synthesized in Hayes et al.<a href="#r1" class="ref">1</a> confers the
-  convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Although initializing with programs converges faster than random initialization, we find that&nbsp;<b>the programmatic attention patterns themselves are much less impactful</b>:
+  convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Although initializing with programs converges faster than random initialization, I find that&nbsp;<b>the programmatic attention patterns themselves are much less impactful</b>:
   programs speed up training no more than the same programs shuffled onto the wrong documents,
   and replacing a head with its program changes the trained model's held-out cross-entropy, on average, as
-  much as <span class="hov" data-tip="By mean ablating the head's output. One concession: we measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>.</p>
+  much as <span class="hov" data-tip="By mean ablating the head's output. One concession: I measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>.</p>
 </header>
 
 <h2 id="motivation-and-commentary">Motivation and Commentary</h2>
@@ -211,7 +211,7 @@ convergence<a href="#r2" class="ref">2</a>. Hayes et al.<a href="#r1" class="ref
 synthesize Python programs that “reproduce those attention maps given only input
 text”: if the programs capture what the heads do, their patterns should <b>accelerate
 convergence too</b>.&nbsp;</p>
-<p>Let <i>exact</i> be the method where the model is initialized with the exact attention patterns the trained model has on each document, while <i>program</i> is the method that matches each head with the best fitting pattern. We already know that exact should help, so the question becomes how program performs: if it beats exact, the fit is denoising the learned circuit into a better prior, and if it loses most of the benefit,
+<p>Let <i>exact</i> be the method where the model is initialized with the exact attention patterns the trained model has on each document, while <i>program</i> is the method that matches each head with the best fitting pattern. I already know that exact should help, so the question becomes how program performs: if it beats exact, the fit is denoising the learned circuit into a better prior, and if it loses most of the benefit,
 the approximation dropped something that matters for learning.</p><p>The rest of this describes my findings from training GPT-2-style models with various attention pattern initializations. I first found a large speedup for exact and a modest one for programmatic. My goal was then to identify what<b> predicted the training speedup</b> that an attention head (programmatic or real) would confer.</p>
 <p>For real heads there are predictors: the benefit rises with depth and with "input dependence", or how much the
 head's attention moves with the text (ρ&nbsp;=&nbsp;+0.25 over all 144 heads). For programs
@@ -457,7 +457,7 @@ don't help.</p>
 <h2 id="the-pruning-effect-causal">The pruning effect, causal</h2>
 <p>If programs carry no routing, why does splicing one into a trained model preserve it at
 all? The paper flags that its replacement gains “may be akin to a pruning effect.”
-We find that <b>they are</b>: a program preserves the trained model <b>on average as well as deleting the head</b>, and the
+I find that <b>they are</b>: a program preserves the trained model <b>on average as well as deleting the head</b>, and the
 head's own mean pattern does slightly better with no program at all.</p>
 <figure><div class="figbox"><svg viewBox="0 0 720 260" class="fig" role="img" aria-label="Bar chart: replacing one head in the pretrained GPT-2, the best-fit program costs the same as deleting the head; the head's own mean pattern costs less; uniform and zeroing cost more">
 <text x="44" y="22" class="s-t">cost of replacing one head in the trained GPT-2, nats of cross-entropy</text>
@@ -526,7 +526,7 @@ by +0.45 points, <em>p</em>&nbsp;=&nbsp;3×10<sup>−4</sup>). The speedup is bo
 routing, in proportion to the dose.</p>
 
 <h2 id="open">Open</h2>
-<p>We know that the paper's programs do not work in the ways we've tried, but nothing about what symbolic attention patterns could do in principle. We also have not evaluated on downstream abilities like QA. One thing worth running: an induction-style rule that genuinely
+<p>I know that the paper's programs do not work in the ways I've tried, but nothing about what symbolic attention patterns could do in principle. I also have not evaluated on downstream abilities like QA. One thing worth running: an induction-style rule that genuinely
 tracks the text.</p>
 
 <h2 id="references">References</h2>
@@ -537,6 +537,7 @@ tracks the text.</p>
     Randomly from Learning Sparse Attention Patterns.</i>
     <a href="https://arxiv.org/abs/2606.25010">arXiv:2606.25010</a>.</li>
 </ol>
+<footer>Experiments and writeup by Gene Yang, with substantial help from Anthropic&rsquo;s Claude Code.</footer>
 </div>
 <script>
 (function () {
