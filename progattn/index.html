@@ -202,7 +202,7 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
   convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Although initializing with programs converges faster than random initialization, we find that&nbsp;<b>the programmatic attention patterns themselves are much less impactful</b>:
   programs speed up training no more than the same programs shuffled onto the wrong documents,
   and replacing a head with its program changes the trained model's held-out cross-entropy, on average, as
-  much as <span class="hov" data-tip="This is the pruning effect the paper flags; we do not test QA or generalization.">deleting the head</span>.</p>
+  much as <span class="hov" data-tip="Deleting = mean-ablation, the pruning literature's operation: the head's output is replaced by its average over the evaluation documents, so it contributes only a constant, input-independent signal. One concession: we measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>.</p>
 </header>
 
 <h2 id="motivation-and-commentary">Motivation and Commentary</h2>
