@@ -61,8 +61,8 @@ ol.refs li:target{background:var(--band);border-radius:2px}
 .defs{font-family:var(--mono);font-size:.76rem;line-height:1.7;color:var(--muted);
   max-width:42rem;display:flex;flex-direction:column;gap:.4rem}
 .defs b{color:var(--ink);font-weight:500}
-h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,6.4vw,3.4rem);
-  line-height:1;letter-spacing:-.028em;text-wrap:balance;max-width:18ch}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.35rem,3.2vw,1.9rem);
+  line-height:1.2;letter-spacing:-.02em;text-wrap:balance;max-width:none}
 
 h2{font-family:var(--display);font-weight:600;font-size:1.34rem;letter-spacing:-.015em;
   text-wrap:balance;margin-top:2.2rem;max-width:40ch}
@@ -183,7 +183,7 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
 <body>
 <nav class="toc" aria-label="Contents">
 <div class="toc-title">Contents</div>
-<a href="#motivation-and-commentary">Motivation and Commentary</a>
+<a href="#motivation-and-commentary">Motivation and commentary</a>
 <a href="#setup">Setup</a>
 <a href="#main-result">Main result</a>
 <a href="#why-exact-gives-speedups-while-program-d">Why exact gives speedups while program doesn't</a>
@@ -194,25 +194,18 @@ h2[id],.part[id]{scroll-margin-top:1.4rem}
 </nav>
 <div class="wrap">
 <header>
-  <h1>Training Transformers with Programmatic Attention Fails Without Routing-Carrying Programs</h1>
-  <div class="byline">Gene Yang · 31 August 2026 · the brief version —
-  <a href="full.html">full report</a></div>
-  <p class="abstract">I investigate whether <b>initializing</b> a fresh transformer with the
+  <h1>Training transformers with programmatic attention fails without routing-carrying programs</h1>
+  <div class="byline">Gene Yang · 31 August 2026</div>
+  <p class="abstract">I test whether initializing a fresh transformer with the
   programmatic attention patterns synthesized in Hayes et al.<a href="#r1" class="ref">1</a> confers the
-  convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Although initializing with programs converges faster than random initialization, I find that&nbsp;<b>the programmatic attention patterns themselves are much less impactful</b>:
-  programs speed up training no more than the same programs shuffled onto the wrong documents,
-  and replacing a head with its program changes the trained model's held-out cross-entropy, on average, as
-  much as <span class="hov" data-tip="By mean ablating the head's output. One concession: I measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>.</p>
+  convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Initializing with programs does converge faster than random initialization, but the programs themselves matter little: they speed up training no more than the same programs shuffled onto the wrong documents,
+  and replacing a head with its program changes the trained model's held-out cross-entropy, on average, about as much as <span class="hov" data-tip="By mean ablating the head's output. One concession: I measure held-out cross-entropy only, not QA or downstream task performance.">deleting the head</span>.</p>
 </header>
 
-<h2 id="motivation-and-commentary">Motivation and Commentary</h2>
-<p>It's known that injecting attention patterns from a trained model accelerates
-convergence<a href="#r2" class="ref">2</a>. Hayes et al.<a href="#r1" class="ref">1</a>
-synthesize Python programs that “reproduce those attention maps given only input
-text”: if the programs capture what the heads do, their patterns should <b>accelerate
-convergence too</b>.&nbsp;</p>
-<p>Let <i>exact</i> be the method where the model is initialized with the exact attention patterns the trained model has on each document, while <i>program</i> is the method that matches each head with the best fitting pattern. I already know that exact should help, so the question becomes how program performs: if it beats exact, the fit is denoising the learned circuit into a better prior, and if it loses most of the benefit,
-the approximation dropped something that matters for learning.</p><p>The rest of this describes my findings from training GPT-2-style models with various attention pattern initializations. I first found a large speedup for exact and a modest one for programmatic. My goal was then to identify what<b> predicted the training speedup</b> that an attention head (programmatic or real) would confer.</p>
+<h2 id="motivation-and-commentary">Motivation and commentary</h2>
+<p>Injecting attention patterns from a trained model into a fresh one accelerates its convergence<a href="#r2" class="ref">2</a>. Hayes et al.<a href="#r1" class="ref">1</a>
+synthesize Python programs that “reproduce those attention maps given only input text”. If the programs capture what the heads do, their patterns should accelerate convergence too.</p>
+<p>Call <i>exact</i> the condition where a head is held to the attention the trained model produces on each document, and <i>program</i> the condition where it is held to the best-fitting synthesized pattern. Exact should help; the open question is program. If program beats exact, the fit denoised the learned circuit into a better prior. If it loses most of the benefit, the approximation dropped something that matters for learning.</p><p>I trained GPT-2-style models under these initializations and found a large speedup for exact and a modest one for program. I then looked for what predicted the speedup a given head would confer, programmatic or real.</p>
 <p>For real heads there are predictors: the benefit rises with depth and with "input dependence", or how much the
 head's attention moves with the text (ρ&nbsp;=&nbsp;+0.25 over all 144 heads). For programs
 everything failed. IoU predicted nothing, and sparsity, which did predict program speedup on
@@ -267,7 +260,7 @@ baseline, defined only when every threshold is reached.</p>
 </table></div>
 
 <h2 id="main-result">Main result</h2>
-<p>Exact attention <b>transfers and boosts training</b>, while programs barely do so. Re-pairing patterns with the wrong documents collapses exact's speedup and leaves program runs unmoved. Programs
+<p>Exact attention transfers and boosts training; programs barely do. Re-pairing patterns with the wrong documents collapses exact's speedup and leaves program runs unmoved. Programs
 match the heads' sparsity (mean row entropy 1.76 against 1.81), so no property of the patterns
 themselves explains the gap; the benefit rides on the pairing.</p>
 <div class="ktog" role="group" aria-label="heads constrained per run">
@@ -436,18 +429,17 @@ themselves explains the gap; the benefit rides on the pairing.</p>
 </div>
 
 <h2 id="why-exact-gives-speedups-while-program-d">Why exact gives speedups while program doesn't</h2>
-<h3 id="x1">Any stable prior helps?</h3>
+<h3 id="x1">Any stable prior helps</h3>
 <p>Causal-uniform is a fixed, valid attention prior injected identically. It buys +0.01% over
 all 144 heads and −0.9% at K = 16, so the programs' small edge must come from what they
 specifically contain.</p>
-<h3 id="x2">The fit discards the input-dependence that matters?</h3>
+<h3 id="x2">The fit discards the input-dependence that matters</h3>
 <p>The paper re-ranks candidate programs by document-averaged IoU, which favors flat
 programs: the chosen fits average 0.049 input-dependence against the library's 0.161,
-8.9&nbsp;SD below a random pick. But giving every head the program synthesized from its own attention — 3.3× the
-input-dependence of the best fit — converges the same (+0.42% against +0.34%,
+8.9&nbsp;SD below a random pick. But giving every head the program synthesized from its own attention, with 3.3× the input-dependence of the best fit, converges the same (+0.42% against +0.34%,
 <em>p</em>&nbsp;=&nbsp;0.41) and is equally indifferent to shuffling. More input-dependence in
 the program does not put routing back.</p>
-<h3 id="x3">The fixed rule freezes the circuits programs need?</h3>
+<h3 id="x3">The fixed rule freezes the circuits programs need</h3>
 <p>Under bias injection the QK circuits keep their gradients and each head learns a weight λ on
 its prior. The ordering reproduces (exact +3.90%, own program +0.67%, best-fit +0.30%,
 uniform +0.05% over 144 heads), and heads amplify their program priors
@@ -455,9 +447,7 @@ uniform +0.05% over 144 heads), and heads amplify their program priors
 don't help.</p>
 
 <h2 id="the-pruning-effect-causal">The pruning effect, causal</h2>
-<p>If programs carry no routing, why does splicing one into a trained model preserve it at
-all? The paper flags that its replacement gains “may be akin to a pruning effect.”
-I find that <b>they are</b>: a program preserves the trained model <b>on average as well as deleting the head</b>, and the
+<p>The paper flags that its replacement gains “may be akin to a pruning effect.” I find that they are: a program preserves the trained model on average as well as deleting the head, and the
 head's own mean pattern does slightly better with no program at all.</p>
 <figure><div class="figbox"><svg viewBox="0 0 720 260" class="fig" role="img" aria-label="Bar chart: replacing one head in the pretrained GPT-2, the best-fit program costs the same as deleting the head; the head's own mean pattern costs less; uniform and zeroing cost more">
 <text x="44" y="22" class="s-t">cost of replacing one head in the trained GPT-2, nats of cross-entropy</text>
@@ -482,8 +472,7 @@ head's own mean pattern does slightly better with no program at all.</p>
 
 
 <h2 id="how-much-routing-buys-the-speedup-back">How much routing buys the speedup back</h2>
-<p>The ladder's gentlest replacement was the head's own mean pattern — its shape with the
-routing removed. That template is one end of a dial: replace each head's pattern with
+<p>The ladder's gentlest replacement was the head's own mean pattern, its shape with the routing removed. That template is one end of a dial: replace each head's pattern with
 λ·(its attention on the document) + (1−λ)·(its document-mean template) and train as before
 (16 heads, 3 seeds, one head per run).</p>
 <figure><div class="figbox"><svg viewBox="0 0 660 300" class="fig" role="img" aria-label="Line chart: strict convergence speedup rises monotonically and concavely from +1.5% at lambda 0 to +6.1% at lambda 1; a dashed reference line marks the best-fit program at +1.35%">
@@ -517,16 +506,13 @@ routing removed. That template is one end of a dial: replace each head's pattern
 <text x="345" y="288" class="s-l" text-anchor="middle">fraction λ of the head's own routing — λ = 0 its document-mean template, λ = 1 its exact attention</text>
 </svg></div><figcaption>Strict convergence speedup as each head's pattern is interpolated from its document-mean template to its exact attention. Dashed line: the best-fit program.</figcaption></figure>
 <p>The template alone matches the best-fit program (+1.51% against +1.35%,
-<em>p</em>&nbsp;=&nbsp;0.22) — the program floor reached with the head's own shape, no
-symbolic fit — and every dose of real routing is significant (each point over program at
-<em>p</em>&nbsp;≤&nbsp;4×10<sup>−5</sup>). The curve is concave — the
-first quarter of the routing restores 47% of the program-to-exact gap — and the last quarter
-is still real (exact over λ = ¾
+<em>p</em>&nbsp;=&nbsp;0.22): the program floor is reached with the head's own shape and no symbolic fit. Every dose of real routing is significant (each point over program at
+<em>p</em>&nbsp;≤&nbsp;4×10<sup>−5</sup>). The curve is concave, with the first quarter of the routing restoring 47% of the program-to-exact gap, and the last quarter is still real (exact over λ = ¾
 by +0.45 points, <em>p</em>&nbsp;=&nbsp;3×10<sup>−4</sup>). The speedup is bought by
 routing, in proportion to the dose.</p>
 
 <h2 id="open">Open</h2>
-<p>I know that the paper's programs do not work in the ways I've tried, but nothing about what symbolic attention patterns could do in principle. I also have not evaluated on downstream abilities like QA. One thing worth running: an induction-style rule that genuinely
+<p>These runs show that the paper's programs do not work in the ways I tried; they say nothing about what symbolic attention patterns could do in principle. I also have not evaluated downstream abilities like QA. One thing worth running: an induction-style rule that genuinely
 tracks the text.</p>
 
 <h2 id="references">References</h2>
