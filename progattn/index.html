@@ -15,7 +15,7 @@
   --display:"Chivo","Helvetica Neue",Arial,sans-serif;
   --body:"Source Serif 4",Georgia,"Times New Roman",serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
-  --measure:34rem;
+  --measure:38rem;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#0F1216; --surface:#171B21; --ink:#E7EAF0; --muted:#98A1AE; --rule:#252B34;
@@ -28,7 +28,7 @@
 *{box-sizing:border-box}
 body{background:var(--ground);color:var(--ink);font-family:var(--body);
   font-size:17px;line-height:1.62;margin:0;-webkit-font-smoothing:antialiased}
-.wrap{max-width:41rem;margin:0 auto;padding:0 1.5rem 6rem;
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.5rem 6rem;
   display:flex;flex-direction:column;gap:1.15rem}
 .wrap>*{margin:0}
 p{max-width:var(--measure)}
@@ -37,14 +37,14 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--live);outline-offs
 
 header{padding:4.5rem 0 1.5rem;display:flex;flex-direction:column;gap:1.1rem}
 .byline{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
-.abstract{font-size:1.1rem;line-height:1.55;max-width:36rem;padding-left:1.1rem;
+.abstract{font-size:1.1rem;line-height:1.55;max-width:40rem;padding-left:1.1rem;
   border-left:2px solid var(--live)}
 .part{font-family:var(--mono);font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink);border-top:2px solid var(--ink);padding-top:.85rem;margin-top:1.6rem}
 .qnum{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--live);margin-top:2.2rem}
 h2.q{margin-top:.3rem}
-.ans{max-width:38rem;padding:.75rem 0 .1rem 1.1rem;border-left:2px solid var(--live);
+.ans{max-width:42rem;padding:.75rem 0 .1rem 1.1rem;border-left:2px solid var(--live);
   font-size:1.05rem;line-height:1.5}
 .ans b{font-weight:600}
 .ev{font-family:var(--mono);font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;
@@ -54,12 +54,12 @@ h3{font-family:var(--mono);font-weight:500;font-size:.74rem;letter-spacing:.11em
 sup,.ref{font-size:.62em;vertical-align:super;line-height:0}
 a.ref{text-decoration:none;padding-left:.12em;font-family:var(--mono)}
 a.ref::before{content:"["} a.ref::after{content:"]"}
-ol.refs{max-width:38rem;padding-left:1.4rem;font-size:.92rem;line-height:1.5;
+ol.refs{max-width:42rem;padding-left:1.4rem;font-size:.92rem;line-height:1.5;
   display:flex;flex-direction:column;gap:.5rem}
 ol.refs li::marker{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
 ol.refs li:target{background:var(--band);border-radius:2px}
 .defs{font-family:var(--mono);font-size:.76rem;line-height:1.7;color:var(--muted);
-  max-width:38rem;display:flex;flex-direction:column;gap:.4rem}
+  max-width:42rem;display:flex;flex-direction:column;gap:.4rem}
 .defs b{color:var(--ink);font-weight:500}
 h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,6.4vw,3.4rem);
   line-height:1;letter-spacing:-.028em;text-wrap:balance;max-width:18ch}
@@ -126,7 +126,7 @@ tr.tot td{font-weight:500;background:var(--band)}
 code{font-family:var(--mono);font-size:.85em;background:var(--band);padding:.09em .32em;
   border-radius:2px}
 .callout{background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--live);
-  border-radius:3px;padding:1rem 1.15rem;max-width:38rem;
+  border-radius:3px;padding:1rem 1.15rem;max-width:42rem;
   display:flex;flex-direction:column;gap:.55rem}
 .callout p{max-width:none}
 .callout.warn{border-left-color:var(--cost)}
@@ -141,7 +141,7 @@ code{font-family:var(--mono);font-size:.85em;background:var(--band);padding:.09e
   white-space:nowrap;vertical-align:middle}
 ul{max-width:var(--measure);padding-left:1.1rem;display:flex;flex-direction:column;gap:.45rem}
 li::marker{color:var(--muted)}
-details{border-top:1px solid var(--rule);padding-top:.9rem;max-width:38rem}
+details{border-top:1px solid var(--rule);padding-top:.9rem;max-width:42rem}
 summary{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;
   color:var(--muted);cursor:pointer}
 details[open] summary{padding-bottom:.7rem}
@@ -154,8 +154,44 @@ footer{border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1.1rem;
 [hidden]{display:none!important}
 img{max-width:100%}
 </style>
+<style id="toccss">
+html{scroll-behavior:smooth}
+h2[id],.part[id]{scroll-margin-top:1.4rem}
+.toc{position:fixed;top:4.7rem;left:calc(50% - 23rem - 16.5rem);width:14rem;
+  max-height:calc(100vh - 7rem);overflow-y:auto;
+  font-family:var(--mono);font-size:.72rem;line-height:1.45;
+  display:flex;flex-direction:column;gap:.5rem}
+.toc-title{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding-left:.6rem;margin-bottom:.2rem}
+.toc a{color:var(--muted);text-decoration:none;display:block;
+  border-left:2px solid transparent;padding-left:.6rem}
+.toc a:hover{color:var(--ink)}
+.toc a.active{color:var(--live);border-left-color:var(--live)}
+.toc a.grp{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink);margin-top:.55rem}
+@media (max-width:79rem){.toc{display:none}}
+.hov{position:relative}
+.hov::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + .4rem);
+  z-index:5;width:17rem;background:var(--surface);color:var(--ink);
+  border:1px solid var(--rule);border-radius:3px;padding:.5rem .65rem;
+  font-family:var(--mono);font-size:.68rem;line-height:1.5;
+  opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.hov:hover::after{opacity:1;visibility:visible}
+</style>
 </head>
 <body>
+<nav class="toc" aria-label="Contents">
+<div class="toc-title">Contents</div>
+<a href="#motivation-and-commentary">Motivation and Commentary</a>
+<a href="#setup">Setup</a>
+<a href="#main-result">Main result</a>
+<a href="#why-exact-gives-speedups-while-program-d">Why exact gives speedups while program doesn't</a>
+<a href="#the-pruning-effect-causal">The pruning effect, causal</a>
+<a href="#how-much-routing-buys-the-speedup-back">How much routing buys the speedup back</a>
+<a href="#open">Open</a>
+<a href="#references">References</a>
+</nav>
 <div class="wrap">
 <header>
   <h1>Training Transformers with Programmatic Attention Fails Without Routing-Carrying Programs</h1>
@@ -166,11 +202,10 @@ img{max-width:100%}
   convergence speedup that exact attention patterns from a trained GPT-2 do, and if so, what predicts it. Although initializing with programs converges faster than random initialization, we find that&nbsp;<b>the programmatic attention patterns themselves are much less impactful</b>:
   programs speed up training no more than the same programs shuffled onto the wrong documents,
   and replacing a head with its program changes the trained model's held-out cross-entropy, on average, as
-  much as <span class="hov" title="This is the pruning effect the paper flags; we do not test QA
-or generalization.">deleting the head</span>.</p>
+  much as <span class="hov" data-tip="This is the pruning effect the paper flags; we do not test QA or generalization.">deleting the head</span>.</p>
 </header>
 
-<h2>Motivation and Commentary</h2>
+<h2 id="motivation-and-commentary">Motivation and Commentary</h2>
 <p>It's known that injecting attention patterns from a trained model accelerates
 convergence<a href="#r2" class="ref">2</a>. Hayes et al.<a href="#r1" class="ref">1</a>
 synthesize Python programs that “reproduce those attention maps given only input
@@ -197,7 +232,7 @@ program to its head.</p><p>Then I tested and falsified the following hypotheses 
       <td><a href="#x3">bias mode reproduces the ordering</a></td></tr>
   </tbody>
 </table></div>
-<h2>Setup</h2>
+<h2 id="setup">Setup</h2>
 <p>A fresh 12×12×384 GPT-2-style model trains on TinyStories with attention routing
 supplied per document from cache: one head per run over all 144 GPT-2 heads, and K heads at once
 up to K&nbsp;=&nbsp;48, where K&nbsp;=&nbsp;16 matches the top-16-head patching of Baherwani et
@@ -207,7 +242,7 @@ baseline, defined only when every threshold is reached.</p>
 <rect x="24" y="30" width="288" height="126" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
 <text x="40" y="22" class="s-t">fixed</text>
 <text x="88" y="22" class="s-l">used for every result here</text>
-<text x="40" y="60" class="s-v s-inkt">attn = softmax(QK℡/√d)</text>
+<text x="40" y="60" class="s-v s-inkt">attn = softmax(QKᵀ/√d)</text>
 <text x="40" y="90" class="s-v s-inkt">attn[h] ← pattern</text>
 <text x="40" y="120" class="s-l">the QK circuit of head h gets no gradient</text>
 <line x1="40" y1="72" x2="296" y2="72" class="s-grid"></line>
@@ -231,7 +266,7 @@ baseline, defined only when every threshold is reached.</p>
   </tbody>
 </table></div>
 
-<h2>Main result</h2>
+<h2 id="main-result">Main result</h2>
 <p>Exact attention <b>transfers and boosts training</b>, while programs barely do so. Re-pairing patterns with the wrong documents collapses exact's speedup and leaves program runs unmoved. Programs
 match the heads' sparsity (mean row entropy 1.76 against 1.81), so no property of the patterns
 themselves explains the gap; the benefit rides on the pairing.</p>
@@ -400,7 +435,7 @@ themselves explains the gap; the benefit rides on the pairing.</p>
     <em>p</em>&nbsp;=&nbsp;5×10<sup>−23</sup></span></div>
 </div>
 
-<h2>Why exact gives speedups while program doesn't</h2>
+<h2 id="why-exact-gives-speedups-while-program-d">Why exact gives speedups while program doesn't</h2>
 <h3 id="x1">Any stable prior helps?</h3>
 <p>Causal-uniform is a fixed, valid attention prior injected identically. It buys +0.01% over
 all 144 heads and −0.9% at K = 16, so the programs' small edge must come from what they
@@ -419,7 +454,7 @@ uniform +0.05% over 144 heads), and heads amplify their program priors
 (λ&nbsp;=&nbsp;1.05–1.17) while gaining nothing from them: the programs are used, and still
 don't help.</p>
 
-<h2>The pruning effect, causal</h2>
+<h2 id="the-pruning-effect-causal">The pruning effect, causal</h2>
 <p>If programs carry no routing, why does splicing one into a trained model preserve it at
 all? The paper flags that its replacement gains “may be akin to a pruning effect.”
 We find that <b>they are</b>: a program preserves the trained model <b>on average as well as deleting the head</b>, and the
@@ -446,7 +481,7 @@ head's own mean pattern does slightly better with no program at all.</p>
 </svg></div><figcaption>Interchange interventions on the pretrained GPT-2, 256 held-out documents, mean over the 16 selected heads. Program and deletion are statistically indistinguishable on average (paired difference −0.0001 nats); per head the difference runs from −0.019 to +0.017 nats.</figcaption></figure>
 
 
-<h2>How much routing buys the speedup back</h2>
+<h2 id="how-much-routing-buys-the-speedup-back">How much routing buys the speedup back</h2>
 <p>The ladder's gentlest replacement was the head's own mean pattern — its shape with the
 routing removed. That template is one end of a dial: replace each head's pattern with
 λ·(its attention on the document) + (1−λ)·(its document-mean template) and train as before
@@ -490,11 +525,11 @@ is still real (exact over λ = ¾
 by +0.45 points, <em>p</em>&nbsp;=&nbsp;3×10<sup>−4</sup>). The speedup is bought by
 routing, in proportion to the dose.</p>
 
-<h2>Open</h2>
+<h2 id="open">Open</h2>
 <p>We know that the paper's programs do not work in the ways we've tried, but nothing about what symbolic attention patterns could do in principle. We also have not evaluated on downstream abilities like QA. One thing worth running: an induction-style rule that genuinely
 tracks the text.</p>
 
-<h2>References</h2>
+<h2 id="references">References</h2>
 <ol class="refs">
   <li id="r1">Hayes, Li &amp; Andreas. <i>Explaining Attention with Program Synthesis.</i>
     <a href="https://arxiv.org/abs/2606.19317">arXiv:2606.19317</a>.</li>
@@ -503,5 +538,26 @@ tracks the text.</p>
     <a href="https://arxiv.org/abs/2606.25010">arXiv:2606.25010</a>.</li>
 </ol>
 </div>
+<script>
+(function () {
+  "use strict";
+  var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  var pairs = [];
+  links.forEach(function (a) {
+    var el = document.getElementById(a.getAttribute("href").slice(1));
+    if (el) pairs.push([el, a]);
+  });
+  if (!pairs.length) return;
+  function update() {
+    var y = window.scrollY + 130;
+    var cur = pairs[0][1];
+    for (var i = 0; i < pairs.length; i++) if (pairs[i][0].offsetTop <= y) cur = pairs[i][1];
+    links.forEach(function (a) { a.classList.toggle("active", a === cur); });
+  }
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update, { passive: true });
+  update();
+})();
+</script>
 </body>
 </html>
